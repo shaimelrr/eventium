@@ -1,0 +1,22 @@
+# Laravel
+/vendor
+/node_modules
+/.env
+/storage/*.key
+/storage/oauth-private.key
+/storage/oauth-public.key
+/storage/debugbar
+
+# React
+frontend/node_modules
+frontend/dist
+frontend/.env
+
+# Docker
+pgdata/
+
+# Otros
+*.log
+.DS_Store
+.idea
+.vscode

@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ../backend
+      dockerfile: ../backend/Dockerfile
+    container_name: laravel-app
+    working_dir: /var/www
+    volumes:
+      - ../backend:/var/www
+    networks:
+      - laravel
+    depends_on:
+      - db
+
+  webserver:
+    image: nginx:alpine
+    container_name: nginx-server
+    ports:
+      - "8000:80"
+    volumes:
+      - ../backend:/var/www
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - app
+    networks:
+      - laravel
+
+  db:
+    image: postgres:15
+    container_name: postgres-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: eventium
+      POSTGRES_USER: eventium
+      POSTGRES_PASSWORD: password123
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - laravel
+
+  frontend:
+    container_name: react-app
+    build:
+      context: ../frontend
+      dockerfile: ../frontend/Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../frontend:/app
+    stdin_open: true
+    tty: true
+    networks:
+      - laravel
+
+networks:
+  laravel:
+
+volumes:
+  pgdata:

@@ -65,4 +65,14 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    public function reservas()
+    {
+    return $this->hasMany(Reserva::class);
+    }
+    public function reservasAsignadas()
+    {
+    return $this->hasMany(Reserva::class, 'proveedor_id');
+    }
+
 }
